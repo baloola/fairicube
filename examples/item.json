@@ -86,6 +86,6 @@
     64.35121892200097
   ],
   "stac_extensions": [
-    "https://fairicube.github.io/fairicube/v0.1.0/schema.json"
+    "https://raw.githubusercontent.com/FAIRiCUBE/fairicube/refs/heads/main/json-schema/schema.json"
   ]
 }
