@@ -1,209 +1,136 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://stac-extensions.github.io/template/v1.0.0/schema.json#",
-  "title": "Template Extension",
-  "description": "STAC Template Extension for STAC Items and STAC Collections.",
+  "$id": "https://stac-extensions.github.io/fairicube/v1.0.0/schema.json#",
+  "title": "FAIRiCUBE Extension",
+  "description": "STAC FAIRiCUBE Extension for STAC Items.",
+  "type": "object",
+  "required": [
+    "stac_extensions"
+  ],
+  "properties": {
+    "stac_extensions": {
+      "type": "array",
+      "contains": {
+        "const": "https://fairicube.github.io/fairicube/v0.1.0/schema.json"
+      }
+    }
+  },
   "oneOf": [
     {
       "$comment": "This is the schema for STAC Items. Remove this object if this extension only applies to Collections.",
-      "allOf": [
-        {
-          "$ref": "#/definitions/stac_extensions"
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "properties",
-            "assets"
-          ],
-          "properties": {
-            "type": {
-              "const": "Feature"
-            },
-            "properties": {
-              "allOf": [
-                {
-                  "$comment": "Require fields here for Item Properties.",
-                  "required": [
-                    "template:new_field"
-                  ]
-                },
-                {
+      "type": "object",
+      "required": [
+        "type",
+        "properties"
+      ],
+      "properties": {
+        "type": {
+          "const": "Feature"
+        }
+
+      },
+      "anyOf": [
+            {
+              "properties": {
+                "properties": {
                   "$ref": "#/definitions/fields"
                 }
-              ]
-            },
-            "assets": {
-              "$comment": "This validates the fields in Item Assets, but does not require them.",
-              "type": "object",
-              "additionalProperties": {
-                "$ref": "#/definitions/fields"
               }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "$comment": "This is the schema for STAC Collections.",
-      "type": "object",
-      "allOf": [
-        {
-          "required": [
-            "type"
-          ],
-          "properties": {
-            "type": {
-              "const": "Collection"
-            }
-          }
-        },
-        {
-          "$ref": "#/definitions/stac_extensions"
-        }
-      ],
-      "anyOf": [
-        {
-          "$comment": "This is the schema for the top-level fields in a Collection. Remove this if this extension does not define top-level fields for Collections.",
-          "allOf": [
-            {
-              "$comment": "Require fields here for Collections (top-level).",
-              "required": [
-                "template:new_field"
-              ]
             },
             {
-              "$ref": "#/definitions/fields"
+              "$ref": "#/definitions/require_properties"
+            },
+            {
+              "$ref": "#/definitions/require_assets"
             }
           ]
-        },
-        {
-          "$comment": "This validates the fields in Collection Assets, but does not require them.",
-          "required": [
-            "assets"
-          ],
-          "properties": {
-            "assets": {
-              "type": "object",
-              "not": {
-                "additionalProperties": {
-                  "not": {
-                    "allOf": [
-                      {
-                        "$ref": "#/definitions/require_any_field"
-                      },
-                      {
-                        "$ref": "#/definitions/fields"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "$comment": "This is the schema for the fields in Item Asset Definitions. It doesn't require any fields.",
-          "required": [
-            "item_assets"
-          ],
-          "properties": {
-            "item_assets": {
-              "type": "object",
-              "not": {
-                "additionalProperties": {
-                  "not": {
-                    "allOf": [
-                      {
-                        "$ref": "#/definitions/require_any_field"
-                      },
-                      {
-                        "$ref": "#/definitions/fields"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "$comment": "This is the schema for the fields in Summaries. By default, only checks the existence of the properties, but not the schema of the summaries.",
-          "required": [
-            "summaries"
-          ],
-          "properties": {
-            "summaries": {
-              "$ref": "#/definitions/require_any_field"
-            }
-          }
-        }
-      ]
     }
   ],
   "definitions": {
-    "stac_extensions": {
-      "type": "object",
-      "required": [
-        "stac_extensions"
-      ],
-      "properties": {
-        "stac_extensions": {
-          "type": "array",
-          "contains": {
-            "const": "https://stac-extensions.github.io/template/v1.0.0/schema.json"
+    "require_properties": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/require_fields"
+          },
+          {
+            "$ref": "#/definitions/require_in_bands"
+          }
+        ]
+      },
+      "require_assets": {
+        "required": ["assets"],
+        "properties": {
+          "assets": {
+            "$ref": "#/definitions/asset_contains"
           }
         }
-      }
-    },
-    "require_any_field": {
-      "$comment": "Please list all fields here so that we can force the existence of one of them in other parts of the schemas.",
-      "anyOf": [
-        {"required": ["template:new_field"]},
-        {"required": ["template:xyz"]},
-        {"required": ["template:another_one"]}
-      ]
-    },
+      },
     "fields": {
-      "$comment": "Add your new fields here. Don't require them here, do that above in the corresponding schema.",
       "type": "object",
       "properties": {
-        "template:new_field": {
-          "type": "string"
+        "fairicube:use_case": {
+          "$ref": "#/definitions/fairicube:use_case"
         },
-        "template:xyz": {
-          "type": "object",
-          "required": [
-            "x",
-            "y",
-            "z"
-          ],
-          "properties": {
-            "x": {
-              "type": "number"
-            },
-            "y": {
-              "type": "number"
-            },
-            "z": {
-              "type": "number"
-            }
-          }
-        },
-        "template:another_one": {
-          "type": "array",
-          "items": {
-            "type": "number"
-          }
+        "fairicube:quality_measures": {
+          "$ref": "#/definitions/fairicube:quality_measures"
         }
       },
       "patternProperties": {
-        "^(?!template:)": {
-          "$comment": "Above, change `template` to the prefix of this extension"
-        }
+        "^(?!fairicube:)": {}
       },
       "additionalProperties": false
+    },
+    "asset_contains": {
+        "type": "object",
+        "not": {
+          "additionalProperties": {
+            "not": {
+              "$ref": "#/definitions/require_properties"
+            }
+          }
+        }
+      },
+    "require_in_bands": {
+        "required": ["bands"],
+        "properties": {
+          "bands": {
+            "type": "array",
+            "contains": {
+              "$ref": "#/definitions/require_fields"
+            }
+          }
+        }
+      },
+      "require_fields": {
+        "anyOf": [
+          { "required": ["fairicube:definition"] },
+          { "required": ["fairicube:comment"] },
+          { "required": ["fairicube:interpolation"] }
+        ]
+      },
+    "fairicube:use_case": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fairicube:quality_measures": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fairicube:definition": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fairicube:comment": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fairicube:interpolation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "json_schema": {
+      "$comment": "JSON Schema",
+      "type": "object"
     }
   }
 }
