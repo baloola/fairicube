@@ -1,22 +1,21 @@
 {
   "type": "Feature",
-  "stac_version": "1.0.0",
+  "stac_version": "1.1.0",
   "id": "eu_demography",
   "properties": {
     "license": "CC-BY-4.0",
     "description": "Count of persons at their usual place of residence per square km",
-    "dataSource": "https://ec.europa.eu/eurostat/web/gisco/geodata/population-distribution/geostat",
     "datetime": "2021-02-17T15:13:53Z",
-    "fairicube:use_case": "Drosophila Genetics (NHM)",
+    "fairicube:usecase": "Drosophila Genetics (NHM)",
     "fairicube:quality_measures": "high",
     "bands": [
       {
-        "band_name": "tot_p",
+        "name": "tot_p",
         "unit": "1/km2",
         "data_type": "uint16",
         "nodata": 65535,
         "fairicube:definition": "https://ec.europa.eu/eurostat/web/gisco/geodata/population-distribution/geostat",
-        "fairicube:description": "Count of persons at their usual place of residence per square km",
+        "fairicube:comment": "Count of persons at their usual place of residence per square km",
         "fairicube:interpolation": "nearest"
       }
     ],
@@ -65,10 +64,16 @@
       "title": "data-access catalog"
     },
     {
-      "rel": "measurement_method",
+      "rel": "measurement-method",
       "href": "https://google.com",
       "type": "text/html",
       "title": "Processing Validation"
+    },
+    {
+      "rel": "via",
+      "href": "https://ec.europa.eu/eurostat/web/gisco/geodata/population-distribution/geostat",
+      "type": "text/html",
+      "title": "Data Source"
     }
   ],
   "assets": {
@@ -86,6 +91,6 @@
     64.35121892200097
   ],
   "stac_extensions": [
-    "https://raw.githubusercontent.com/FAIRiCUBE/fairicube/refs/heads/main/json-schema/schema.json"
+    "https://fairicube.github.io/fairicube/v1.0.0/schema.json"
   ]
 }
